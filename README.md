@@ -1,4 +1,5 @@
 # livesentiment
+<<<<<<< HEAD
 An R package for Sentiment Analysis of Real Time Twitter Feeds.
 
 Package development still in alpha stage. 
@@ -9,3 +10,6 @@ A tutorial on how to set up the twitter oauth is going to be added soon.
 
 Feel free to use this application and leave comments on how to improve it!
 
+=======
+R package for sentiment analysis of real time twitter feeds
+>>>>>>> 05f103eb4a9dd7ad568ffad828b07f992e52add9
