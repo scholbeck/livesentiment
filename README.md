@@ -1,5 +1,5 @@
 # livesentiment
-R package for sentiment analysis of real time twitter feeds
+R package for sentiment analysis of real time twitter feeds.
 
 Package development still in alpha stage.
 
