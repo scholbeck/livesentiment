@@ -1,0 +1,33 @@
+Package: livesentiment
+Title: Live Sentiment Analysis of Twitter Streams
+Version: 0.9
+Authors@R: person("Christian A.", "Scholbeck", email = "christian.scholbeck@gmx.de", role = c("aut", "cre"))
+Description: Interactive shiny based user interface for sentiment analysis of twitter streams.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Depends:
+  R (>= 3.4.2),
+  streamR,
+  twitteR,
+  ROAuth,
+  shiny,
+  shinydashboard,
+  leaflet,
+  dplyr,
+  reshape2,
+  tibble,
+  tidytext,
+  tidyr,
+  ggplot2,
+  wordcloud,
+  shinyWidgets,
+  plotly,
+  tidytext,
+  stringr,
+  data.table,
+  shinyjs,
+  glmnet,
+  text2vec
+Suggests: testthat
+RoxygenNote: 6.0.1.9000

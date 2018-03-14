@@ -1,0 +1,5 @@
+#'bing lexicon
+#'
+#'dfdf
+#'
+"bing"
