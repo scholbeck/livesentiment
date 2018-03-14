@@ -1,6 +1,6 @@
 # livesentiment
 
-An R package for Sentiment Analysis of Real Time Twitter Feeds.
+Sentiment analysis of real time twitter feeds in R.
 
 Package development still in early alpha stage. 
 
