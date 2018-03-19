@@ -105,7 +105,7 @@ liveSentiment = function() {
                     selectInput(
                       "method", "Choose sentiment classification method",
                       choices = c(
-                        "Lexicon: Afinn (Scale -5 to 5)",
+                        # "Lexicon: Afinn (Scale -5 to 5)",
                         "Lexicon: Bing (Scale 'positive' & 'negative')",
                         "Statistical model"),
                       selected = "Lexicon: Bing (Scale 'positive' & 'negative')"),
