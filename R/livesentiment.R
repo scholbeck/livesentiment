@@ -58,22 +58,23 @@ liveSentiment = function() {
       switchInput("active", "Pull tweets", value = FALSE),
       HTML('<hr style="color: purple;">'),
       sidebarMenu(
+        menuItem("Authentification", tabName = "auth", icon = icon("key")),
         menuItem("Controls", tabName = "controls", icon = icon("laptop")),
         menuItem("Summary", tabName = "summary", icon = icon("dashboard")),
         menuItem("Tweets", tabName = "tweets", icon = icon("twitter")),
         menuItem("Wordcloud", tabName = "wordcloud", icon = icon("cloud")),
         menuItem("Plots", tabName = "plots", icon = icon("bar-chart")),
         menuItem("Map", tabName = "map", icon = icon("globe"))
-        # {
-        #   if (internal.calc == TRUE) {menuItem("Internal calculations",
-        #                                        tabName = "internalcalc",
-        #                                        icon = icon("cogs"))
-        #   } else {}
-        # }
       )
     ),
     body = dashboardBody(
       tabItems(
+        tabItem(tabName = "auth",
+                h2("Twitter Authentification"),
+                box(width = 12,
+                    fileInput("oauth", "Select oauth.rdata file")
+                )
+        ),
         tabItem(tabName = "controls",
                 h2("Controls"),
                 box(width = 12,
@@ -197,6 +198,16 @@ liveSentiment = function() {
 
     observeEvent(input$reload, {session$reload()})
 
+    observeEvent(input$oauth, {
+      in_file <- isolate({input$oauth})
+      file <- in_file$datapath
+      # load the file into new environment and get it from there
+      e = new.env()
+      name <- load(file, envir = e)
+      my_oauth <<- e[[name]]
+      df$oauth_provided <- TRUE
+    })
+
     observeEvent({
       input$method
       input$model}
@@ -251,10 +262,15 @@ liveSentiment = function() {
     observeEvent({
       input$active
       df$model.trained
-      input$method}, ignoreNULL = FALSE
+      input$method
+      df$oauth_provided}, ignoreNULL = FALSE
       , {
         shinyjs::toggle("active", condition = {
-          (df$model.trained == TRUE) | (df$method == "bing") | (df$method == "afinn")})
+          (df$oauth_provided == TRUE) &&
+            (
+              (df$model.trained == TRUE) | (df$method == "bing") | (df$method == "afinn")
+            )
+        })
         shinyjs::toggle("geolocation", condition = {input$active == FALSE})
         shinyjs::toggleState("hashtag", condition = {input$active == FALSE})
         shinyjs::toggleState("filter", condition = {input$active == FALSE})
