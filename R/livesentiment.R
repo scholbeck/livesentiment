@@ -1,4 +1,5 @@
-pullTweets = function(keyword, file.path, tweets_old = NULL, interval, geolocation = FALSE) {
+pullTweets = function(keyword, file.path, tweets_old = NULL, interval,
+                      geolocation = FALSE) {
 
   filterStream(file = file.path, track = c(keyword), timeout = interval,
                oauth = my_oauth, language = "en")
@@ -6,13 +7,18 @@ pullTweets = function(keyword, file.path, tweets_old = NULL, interval, geolocati
   q = length(tweets.new$text) - length(tweets_old$text)
   if (q != 0) {
     last.observations = tail(tweets.new, q)
-    geotag.id = which(!is.na(last.observations$place_lon) & !is.na(last.observations$place_lat))
+    geotag.id = which(
+      !is.na(last.observations$place_lon) & !is.na(last.observations$place_lat)
+    )
 
     if (geolocation == TRUE) {
       # with geotag
-      txt.geoenabled = last.observations$text[!is.na(last.observations$place_lat)]
-      coords = data.frame("lat" = last.observations$place_lat[!is.na(last.observations$place_lat)],
-                          "lng" = last.observations$place_lon[!is.na(last.observations$place_lon)])
+      txt.geoenabled =
+        last.observations$text[!is.na(last.observations$place_lat)]
+      coords =
+        data.frame(
+          "lat" = last.observations$place_lat[!is.na(last.observations$place_lat)],
+          "lng" = last.observations$place_lon[!is.na(last.observations$place_lon)])
       return(list("text" = txt.geoenabled, "coords" = coords))
     } else {
       # no geotag
@@ -49,10 +55,16 @@ liveSentiment = function() {
       title = "Live Sentiment Analysis with Twitter",
       titleWidth = "400px",
       tags$li(class = "dropdown",
-              actionButton("reload", "Reload application",
-                           width = "100%",
-                           icon("refresh"),
-                           style = "font-size: 16px; color: #fff; background-color: #337ab7; border-color: #2e6da4; padding: 13px"))),
+              actionButton(
+                "reload", "Reload application",
+                width = "100%",
+                icon("refresh"),
+                style = "font-size: 16px; color: #fff;
+                background-color: #337ab7; border-color: #2e6da4;
+                padding: 13px"
+              )
+      )
+    ),
     sidebar = dashboardSidebar(
       disable = FALSE,
       switchInput("active", "Pull tweets", value = FALSE),
@@ -80,35 +92,49 @@ liveSentiment = function() {
                 box(width = 12,
                     switchInput("geolocation", "Location", value = FALSE),
                     HTML('&nbsp;'),
-                    textInput("hashtag", "Tweet keyword without hashtag (separate multiple words with single whitespace)", value = "trump"),
-                    textInput("filter", "Remove words (separate multiple words with single whitespace)"),
-                    sliderInput("interval", "Choose download interval", min = 2, max = 20,
-                                value = 5),
-                    selectInput("method", "Choose sentiment classification method",
-                                choices = c("Lexicon: Afinn (Scale -5 to 5)",
-                                            "Lexicon: Bing (Scale 'positive' & 'negative')",
-                                            "Statistical model"),
-                                selected = "Lexicon: Bing (Scale 'positive' & 'negative')"),
-                    conditionalPanel(condition = "input.method == 'Statistical model'",
-                                     selectInput("model", "Choose statistical model",
-                                                 choices = c("glmNet"),
-                                                 selected = "glmNet")
+                    textInput(
+                      "hashtag",
+                      "Tweet keyword without hashtag (separate multiple words with single whitespace)", value = "trump"),
+                    textInput(
+                      "filter",
+                      "Remove words (separate multiple words with single whitespace)"),
+                    sliderInput(
+                      "interval", "Choose download interval",
+                      min = 2, max = 20, value = 5
                     ),
-                    conditionalPanel(condition = "input.method == 'Statistical model'",
-                                     selectInput("ngram", "Choose ngram for document term matrix",
-                                                 choices = c("1gram", "2gram", "3gram", "4gram"),
-                                                 selected = "1gram")
+                    selectInput(
+                      "method", "Choose sentiment classification method",
+                      choices = c(
+                        "Lexicon: Afinn (Scale -5 to 5)",
+                        "Lexicon: Bing (Scale 'positive' & 'negative')",
+                        "Statistical model"),
+                      selected = "Lexicon: Bing (Scale 'positive' & 'negative')"),
+                    conditionalPanel(
+                      condition = "input.method == 'Statistical model'",
+                      selectInput(
+                        "model", "Choose statistical model",
+                        choices = c("glmNet"),
+                        selected = "glmNet")
                     ),
-                    conditionalPanel(condition = "input.method == 'Statistical model'",
-                                     actionButton("train", "Train classifier")
+                    conditionalPanel(
+                      condition = "input.method == 'Statistical model'",
+                      selectInput(
+                        "ngram", "Choose ngram for document term matrix",
+                        choices = c("1gram", "2gram", "3gram", "4gram"),
+                        selected = "1gram")
+                    ),
+                    conditionalPanel(
+                      condition = "input.method == 'Statistical model'",
+                      actionButton("train", "Train classifier")
                     ),
                     HTML('&nbsp;'),
                     verbatimTextOutput("classif.summary"),
-                    conditionalPanel(condition = "input.method == 'Statistical model'",
-                                     sliderInput("threshold", "Decision boundary",
-                                                 min = 0, max = 1,
-                                                 value = c(0.4, 0.6)
-                                                 )
+                    conditionalPanel(
+                      condition = "input.method == 'Statistical model'",
+                      sliderInput("threshold", "Decision boundary",
+                                  min = 0, max = 1,
+                                  value = c(0.4, 0.6)
+                      )
                     )
                 )
         ),
@@ -172,18 +198,23 @@ liveSentiment = function() {
         ),
         tabItem(tabName = "plots",
                 h2("Plots"),
-                box(width = 12,
-                    sliderInput("wordcount.height", "Plot height", min = 300,
-                                max = 1500, value = 300),
-                    plotOutput("wordcount", height = "auto"),
-                    conditionalPanel(condition = "input.method == 'Statistical model'",
-                                     plotOutput("probplot")
-                    )
+                box(
+                  width = 12,
+                  sliderInput(
+                    "wordcount.height", "Plot height", min = 300, max = 1500,
+                    value = 300),
+                  plotOutput("wordcount", height = "auto"),
+                  conditionalPanel(
+                    condition = "input.method == 'Statistical model'",
+                    plotOutput("probplot")
+                  )
                 )
         ),
         tabItem(tabName = "map",
                 h2("Map"),
-                conditionalPanel(condition = "input.geolocation", leafletOutput("map"))
+                conditionalPanel(
+                  condition = "input.geolocation",
+                  leafletOutput("map"))
         ),
         tabItem(tabName = "internalcalc",
                 h2("Internal calculations")
@@ -215,7 +246,8 @@ liveSentiment = function() {
       if (input$method == "Lexicon: Afinn (Scale -5 to 5)") {
         df$lexicon = afinn
         df$method = "afinn"
-      } else if (input$method == "Lexicon: Bing (Scale 'positive' & 'negative')") {
+      } else if (
+        input$method == "Lexicon: Bing (Scale 'positive' & 'negative')") {
         df$lexicon = bing
         df$method = "bing"
       } else if (input$method == "Statistical model") {
@@ -232,9 +264,15 @@ liveSentiment = function() {
       if (df$method == "afinn" | df$method == "bing") {
         paste0("You are currently using the ", df$method, " lexicon.")
       } else if (df$model.trained == TRUE) {
-        paste0("You are currently using a ", df$model, " with a document term matrix consisting of ", df$ngram,"s.")
+        paste0(
+          "You are currently using a ",
+          df$model,
+          " with a document term matrix consisting of ",
+          df$ngram,"s."
+          )
       } else if (df$model.trained == FALSE) {
-        paste0("No model trained. Please train model before continuing or select lexicon based approach.")
+        paste0(
+          "No model trained. Please train model before continuing or select lexicon based approach.")
       }
     })
 
@@ -268,7 +306,8 @@ liveSentiment = function() {
         shinyjs::toggle("active", condition = {
           (df$oauth_provided == TRUE) &&
             (
-              (df$model.trained == TRUE) | (df$method == "bing") | (df$method == "afinn")
+              (df$model.trained == TRUE) | (df$method == "bing") |
+                (df$method == "afinn")
             )
         })
         shinyjs::toggle("geolocation", condition = {input$active == FALSE})
@@ -325,9 +364,10 @@ liveSentiment = function() {
 
               organized <- organizeTweetsOneliner(tweets.text)
               df$tweets.oneliner <- organized
-              df$tweets.tokenized <- organizeTweetsTokenized(tweets = organized,
-                                                            iter = df$iter,
-                                                            filter = df$filter)
+              df$tweets.tokenized <- organizeTweetsTokenized(
+                tweets = organized,
+                iter = df$iter,
+                filter = df$filter)
               # df$tweets.tokenized = organizeTweetsTokenized(tweets = df$tweets.oneliner, iter = df$iter, filter = df$filter)
               df$tweet_storage = c(df$tweet_storage, df$tweets.oneliner)
               df$amount <- nrow(df$tweet_storage)
@@ -366,8 +406,9 @@ liveSentiment = function() {
       , {
 
       if (df$method == "bing") {
-        bing.sentims = getBingSentiments(df$tweets.oneliner, iter = df$iter,
-                                         filter = df$filter)
+        bing.sentims = getBingSentiments(
+          df$tweets.oneliner, iter = df$iter,
+          filter = df$filter)
         # df$table = data.table("Tweet" = (df$tweets.oneliner %>% select(text)), "Sentiment" = bing.sentims[["individual"]][["sentiment"]])
         df$table = data.table("Number" = bing.sentims$individual$tweetnumber,
                               "Tweets" = bing.sentims$individual$text,
@@ -413,14 +454,16 @@ liveSentiment = function() {
       df$negative = sum(df$sentiment.count[["negative"]] %>% na.omit())
       df$positive = sum(df$sentiment.count[["positive"]] %>% na.omit())
       df$neutral = sum(df$sentiment.count[["neutral"]] %>% na.omit())
-      df$nonclassifrate = paste0(round(digits = 2,
-                                       1-((df$negative + df$neutral + df$positive)/df$amount)) * 100,
-                                 "%")
-
+      df$nonclassifrate = paste0(
+        round(digits = 2,
+              1-((df$negative + df$neutral + df$positive)/df$amount)) * 100,
+        "%")
       recent.sentiment.wordcount = df$tweets.tokenized %>%
         inner_join(df$lexicon) %>%
         count(word, sentiment, sort = TRUE)
-      df$sentiment.wordcount = rbind(df$sentiment.wordcount, recent.sentiment.wordcount)
+      df$sentiment.wordcount = rbind(
+        df$sentiment.wordcount, recent.sentiment.wordcount
+        )
 
       df$sentiment = df$tweets.tokenized %>%
         inner_join(df$lexicon) %>%
@@ -447,16 +490,17 @@ liveSentiment = function() {
     output$negative = renderInfoBox({infoBox("Negative:",
                                              value = df$negative,
                                              icon = shiny::icon("frown-o"))})
-    output$rating = renderInfoBox({infoBox("Rating:",
-                                           value = (
-                                             if(df$positive > df$negative) {
-                                               print("positive")
-                                             } else if (df$positive < df$negative) {
-                                               print("negative")
-                                             } else if (df$positive == df$negative) {
-                                               print("neutral")}
-                                           ),
-                                           icon = shiny::icon("filter"))
+    output$rating = renderInfoBox({
+      infoBox("Rating:",
+              value = (
+                if(df$positive > df$negative) {
+                  print("positive")
+                } else if (df$positive < df$negative) {
+                  print("negative")
+                } else if (df$positive == df$negative) {
+                  print("neutral")}
+              ),
+              icon = shiny::icon("filter"))
     })
 
     observeEvent(input$threshold, {
@@ -479,17 +523,18 @@ liveSentiment = function() {
         select(-c(diff, cumsum)) %>%
         melt("tweetbatch")
 
-      cols = c("negative" = "#F8766D", "positive" = "#00BFC4", "neutral" = "#F1D6AF")
+      cols = c("negative" = "#F8766D", "positive" = "#00BFC4",
+               "neutral" = "#F1D6AF")
 
       ggplot(data = d, aes(x = tweetbatch, y = value, group = variable)) +
         geom_bar(stat = "identity", aes(fill = variable)) +
         scale_fill_manual(values = cols) +
-        # geom_area(aes(x = tweetbatch, y = positive), fill = "#00BFC4", show.legend = FALSE) +
-        # geom_area(aes(x = tweetbatch, y = -negative), fill = "#F8766D", show.legend = FALSE) +
         labs(x = "Tweet batch", y = "Marginal sentiment")
     })
 
-    output$wordcount = renderPlot({wordCount()}, height = function(x) input$wordcount.height)
+    output$wordcount = renderPlot({
+      wordCount()}, height = function(x) input$wordcount.height
+    )
 
     wordCount = eventReactive(df$sentiment.wordcount, {
 

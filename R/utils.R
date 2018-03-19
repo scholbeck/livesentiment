@@ -64,7 +64,10 @@ organizeTweetsOneliner = function(raw.tweets) {
 tweetMap = function(coords) {
 
   m = leaflet() %>%
-    addTiles(group = "OSM", options = providerTileOptions(minZoom = 1, maxZoom = 5)) %>%
+    addTiles(
+      group = "OSM",
+      options = providerTileOptions(minZoom = 1, maxZoom = 5)
+      ) %>%
     addCircleMarkers(data = coords, radius = 10) %>%
     setView(lng = -80, lat = 38, zoom = 3)
   return(m)
@@ -93,14 +96,18 @@ findLinearRoot = function(a, b) {
   return(root)
 }
 
-getBingSentiments = function(tweets_oneliner, iter, filter = NULL, lexicon = bing) {
+getBingSentiments = function(tweets_oneliner, iter, filter = NULL,
+                             lexicon = bing) {
 
   tweets_tokenized = organizeTweetsTokenized(tweets_oneliner, iter = iter)
 
   if (!is.null(filter) && (!filter == "NULL")) {
-    filter.message = paste(sprintf("word == quote(%s)", filter), collapse = " | ")
+    filter.message = paste(
+      sprintf("word == quote(%s)", filter), collapse = " | ")
     filter.message = paste("!(", filter.message, ")", sep = "")
-    tweets_tokenized = filter(tweets_tokenized, eval(parse(text = filter.message)))
+    tweets_tokenized = filter(
+      tweets_tokenized, eval(parse(text = filter.message))
+      )
   } else {}
 
   sentiment <- tweets_tokenized %>%
@@ -110,9 +117,15 @@ getBingSentiments = function(tweets_oneliner, iter, filter = NULL, lexicon = bin
     count(sentiment) %>%
     spread(sentiment, n, fill = 0) %>%
     mutate("tweetbatch" = iter)
-  if (!("positive" %in% colnames(sentiment))) {sentiment = mutate(sentiment, "positive" = 0)}
-  if (!("neutral" %in% colnames(sentiment))) {sentiment = mutate(sentiment, "neutral" = 0)}
-  if (!("negative" %in% colnames(sentiment))) {sentiment = mutate(sentiment, "negative" = 0)}
+  if (!("positive" %in% colnames(sentiment))) {
+    sentiment = mutate(sentiment, "positive" = 0)
+    }
+  if (!("neutral" %in% colnames(sentiment))) {
+    sentiment = mutate(sentiment, "neutral" = 0)
+    }
+  if (!("negative" %in% colnames(sentiment))) {
+    sentiment = mutate(sentiment, "negative" = 0)
+    }
   sentiment = sentiment %>%
     mutate("diff" = positive - negative) %>%
     mutate(sentiment = {
@@ -145,7 +158,8 @@ getBingSentiments = function(tweets_oneliner, iter, filter = NULL, lexicon = bin
 getNrcSentiments = function(tweets, iter, filter = NULL, lexicon = nrc) {
 
   if (!is.null(filter) && (!filter == "NULL")) {
-    filter.message = paste(sprintf("word == quote(%s)", filter), collapse = " | ")
+    filter.message = paste(sprintf("word == quote(%s)", filter),
+                           collapse = " | ")
     filter.message = paste("!(", filter.message, ")", sep = "")
     tweets = filter(tweets, eval(parse(text = filter.message)))
   } else {}
@@ -167,10 +181,12 @@ getNrcSentiments = function(tweets, iter, filter = NULL, lexicon = nrc) {
   return(list("individual" = sentiment, "aggregated" = aggregated))
 }
 
-getLoughranSentiments = function(tweets, iter, filter = NULL, lexicon = loughran) {
+getLoughranSentiments = function(tweets, iter, filter = NULL,
+                                 lexicon = loughran) {
 
   if (!is.null(filter) && (!filter == "NULL")) {
-    filter.message = paste(sprintf("word == quote(%s)", filter), collapse = " | ")
+    filter.message = paste(sprintf("word == quote(%s)", filter),
+                           collapse = " | ")
     filter.message = paste("!(", filter.message, ")", sep = "")
     tweets = filter(tweets, eval(parse(text = filter.message)))
   } else {}
@@ -195,7 +211,8 @@ getLoughranSentiments = function(tweets, iter, filter = NULL, lexicon = loughran
 getAfinnSentiments = function(tweets, iter, filter = NULL, lexicon = afinn) {
 
   if (!is.null(filter) && (!filter == "NULL")) {
-    filter.message = paste(sprintf("word == quote(%s)", filter), collapse = " | ")
+    filter.message = paste(sprintf("word == quote(%s)", filter),
+                           collapse = " | ")
     filter.message = paste("!(", filter.message, ")", sep = "")
     tweets = filter(tweets, eval(parse(text = filter.message)))
   } else {}
@@ -220,15 +237,11 @@ getAfinnSentiments = function(tweets, iter, filter = NULL, lexicon = afinn) {
     ungroup() %>%
     mutate(sentiment = sum(individual$sentiment))
 
-  # sums = sapply(colnames(aggregated[!colnames(aggregated) %in% "tweetbatch"]),
-  # #               FUN = function(colname) as.numeric(colname) * test$aggregated[colname])
-  # aggregated = aggregated %>%
-  #   mutate(score = sum(sentiment$sentiment))
-
   return(list("individual" = individual, "aggregated" = aggregated))
 }
 
-organizeTweetsTokenized = function(tweets, iter, remove.stopwords = TRUE, filter = NULL) {
+organizeTweetsTokenized = function(tweets, iter, remove.stopwords = TRUE,
+                                   filter = NULL) {
 
   replace_reg = "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT|https"
   unnest_reg = "([^A-Za-z_\\d#@']|'(?![A-Za-z_\\d#@]))"
@@ -248,17 +261,14 @@ organizeTweetsTokenized = function(tweets, iter, remove.stopwords = TRUE, filter
     return(organized.tweets)
   }
 }
-# tweet = "not bad"
-# orga = organizeTweets(tweet, iter = 1, filter = NULL, remove.stopwords = FALSE)
-# getBingSentiments(orga, iter = 1, filter = NULL)
-#
 
 ### icon names
 
 getIconNames = function() {
   file_text <- readr::read_file(
-    paste0(.libPaths()[1],
-           "/leaflet/htmlwidgets/plugins/Leaflet.awesome-markers/font-awesome.min.css")
+    paste0(
+      .libPaths()[1],
+      "/leaflet/htmlwidgets/plugins/Leaflet.awesome-markers/font-awesome.min.css")
   )
   icon_names <- stringr::str_extract_all(file_text, "(fa-)([^:]+)")[[1]]
   icon_names <- icon_names[-(1:36)] %>%
@@ -266,5 +276,3 @@ getIconNames = function() {
   icon_names
 
 }
-
-# "laptop" %in% getIconNames()

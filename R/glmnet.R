@@ -68,15 +68,7 @@ getGlmnetSentiments <- function(classif, vocab, tweets_oneline_format,
   docterm.tfidf = fit_transform(docterm, tfidf)
   # train the model
   preds = predict(classif, docterm.tfidf, type = 'response')[ , 1]
-  # preds = sapply(preds, FUN = function(x) {
-  #   if (x <= 0.45) {
-  #     return("negative")
-  #   } else if (x >= 0.55) {
-  #     return("positive")
-  #   } else {
-  #     return("neutral")
-  #   }
-  # })
+
   sentims = predsToSentiments(preds, lower.threshold = lower.threshold,
                               upper.threshold = upper.threshold)
   out_df = data.table(tweets_oneline_format, sentims, preds)
@@ -98,22 +90,6 @@ predsToSentiments <- function(preds, lower.threshold, upper.threshold) {
   return(sentims)
 }
 
-# classifier = trainGlmNet(tweets.training, ngram = "3gram")
-# classifier = trainSentimClassif("glmNet", tweets.training, ngram = "3gram")
-# tweets = pullTweets(keyword = "trump", file.path = "tweets/tweets.json", interval = 5, geolocation = TRUE)
-# tweets_org = organizeTweetsOneliner(tweets$text)
-# tweets.df = tweets$text
-  # tweets.tok = organizeTweetsTokenized(tweets_org, iter = 1)
-# getBingSentiments(tweets_org, iter = 1)
-#
-# #
-# pred = getGlmnetSentiments(classifier$classif, classifier$vocab, tweets_org,
-                           # lower.threshold = 0.4, upper.threshold = 0.6)
-# summary(pred)
-# pred = countStatModelSentiments(pred, iter = 1)
-# #
-# #
-
 countStatModelSentiments = function(sentiment_df, iter) {
   sentiment_df = sentiment_df %>%
     select(-text) %>%
@@ -121,8 +97,12 @@ countStatModelSentiments = function(sentiment_df, iter) {
     spread(sentiment, n) %>%
     mutate(tweetbatch = iter)
 
-  if (!("positive" %in% colnames(sentiment_df))) {sentiment_df = mutate(sentiment_df, "positive" = 0)}
-  if (!("negative" %in% colnames(sentiment_df))) {sentiment_df = mutate(sentiment_df, "negative" = 0)}
+  if (!("positive" %in% colnames(sentiment_df))) {
+    sentiment_df = mutate(sentiment_df, "positive" = 0)
+    }
+  if (!("negative" %in% colnames(sentiment_df))) {
+    sentiment_df = mutate(sentiment_df, "negative" = 0)
+    }
 
   sentiment_df = sentiment_df %>%
     mutate("diff" = positive - negative)
@@ -140,9 +120,12 @@ predictionPlot = function(pred_df, lower.threshold, upper.threshold) {
   n = nrow(pred_df)
   ggplot(data = pred_df, aes(x = 1:n, y = prob)) +
     geom_point(aes(color = sentiment), size = 1.5) +
-    geom_hline(yintercept = c(lower.threshold, upper.threshold), color = "black", size = 1) + 
-    scale_colour_manual(values = c("negative" = "red", "neutral" = "orange", "positive" = "darkblue"))
-  
+    geom_hline(yintercept = c(lower.threshold, upper.threshold),
+               color = "black", size = 1) +
+    scale_colour_manual(
+      values = c("negative" = "red",
+                 "neutral" = "orange",
+                 "positive" = "darkblue")
+      )
 }
 
-# predictionPlot(pred, 0.4, 0.6)
