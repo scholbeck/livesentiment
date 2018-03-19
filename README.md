@@ -10,6 +10,6 @@ A tutorial on how to set up the twitter oauth is going to be added soon.
 Meanwhile, follow this link to an excellent manual on how to create a Twitter authentification in R.
 http://pablobarbera.com/big-data-upf/html/02d-twitter-streaming-data-collection.html
 
-After saving your authentification credentials as an ```.rdata file, you can start the application with the ```liveSentiment()``` call and load your ```<my_oauth>.rdata``` file in the ```Authentification``` tab.
+After saving your authentification credentials as an ```.rdata file```, you can start the application with the ```liveSentiment()``` call and load your ```<my_oauth>.rdata``` file in the ```Authentification``` tab.
 
 Feel free to use this application and leave comments on how to improve it.
