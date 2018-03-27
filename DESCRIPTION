@@ -2,8 +2,8 @@ Package: livesentiment
 Title: Live Sentiment Analysis of Twitter Streams
 Version: 0.9
 Authors@R: person("Christian A.", "Scholbeck", email = "christian.scholbeck@gmx.de", role = c("aut", "cre"))
-Description: Interactive shiny based user interface for sentiment analysis of twitter streams.
-License: What license is it under?
+Description: An interactive shiny based user interface for sentiment analysis of real time twitter streams.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
