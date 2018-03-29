@@ -17,4 +17,4 @@ Feel free to use this application and leave comments on how to improve it.
 
 &nbsp;
 
-![demo picture placeholder](../livesentiment/images/demo.png)
+![demo picture placeholder](images/demo.png)
