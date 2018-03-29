@@ -7,10 +7,10 @@
 liveSentiment()
 }
 \description{
-This function calls a shiny based interactive user interface for analyzing 
+This function calls a shiny based interactive user interface for analyzing
 real time twitter feeds.
 }
 \details{
-Setting up a twitter oath (with an existing twitter account) is necessary
-beforehand.
+Setting up a twitter oath (with an existing twitter account) and saving it as
+an '.rdata' file is necessary beforehand.
 }
