@@ -1,5 +1,3 @@
 #'bing lexicon
 #'
-#'dfdf
-#'
 "bing"

@@ -36,9 +36,6 @@ pullTweets = function(keyword, file.path, tweets_old = NULL, interval,
 #'
 #' Setting up a twitter oath (with an existing twitter account) and saving it as
 #' an '.rdata' file is necessary beforehand.
-#' @example
-#' liveSentiment()
-#'
 #' @export
 liveSentiment = function() {
 

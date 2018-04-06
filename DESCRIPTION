@@ -6,7 +6,7 @@ Description: An interactive shiny based user interface for sentiment analysis of
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Depends:
+Imports:
   R (>= 3.4.2),
   streamR,
   twitteR,

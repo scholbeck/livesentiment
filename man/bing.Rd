@@ -9,6 +9,6 @@
 bing
 }
 \description{
-dfdf
+bing lexicon
 }
 \keyword{datasets}
