@@ -12,9 +12,6 @@ http://pablobarbera.com/big-data-upf/html/02d-twitter-streaming-data-collection.
 
 After saving your authentification credentials as an ```.rdata file```, you can start the application with the ```liveSentiment()``` call and load your ```<my_oauth>.rdata``` file in the ```Authentification``` tab.
 
-Feel free to use this application and leave comments on how to improve it.
-
-
 &nbsp;
 
 ![demo picture placeholder](images/demo.png)
